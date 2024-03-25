@@ -1,6 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography, Grid, Paper, Avatar, Button } from '@material-ui/core';
 import TopMenu from '../components/TopMenu';
+import SecureLS from 'secure-ls';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,6 +22,8 @@ const useStyles = makeStyles((theme) => ({
 
 const Profile = () => {
   const classes = useStyles();
+  const ls = new SecureLS({ encodingType: 'aes', isCompression: false });
+  const userdata = JSON.parse(ls.get('userData'));
 
   return (
     <>
@@ -32,15 +35,17 @@ const Profile = () => {
       <Grid container spacing={3}>
         <Grid item xs={12} md={4}>
           <Paper className={classes.paper}>
-            <Avatar alt="Nome do Usuário" src="/avatar.jpg" className={classes.largeAvatar} />
+            <Avatar alt={userdata.username} src="/avatar.jpg" className={classes.largeAvatar} />
+            <br/>
             <Typography variant="h5" gutterBottom>
-              Nome do Usuário
+              {userdata.username}
             </Typography>
             <Typography variant="subtitle1" gutterBottom>
-              Cargo / Profissão
+              {userdata.role}
             </Typography>
             <Typography variant="body1">
-              Sobre mim: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.
+              Habilidades:
+              {userdata.skills}
             </Typography>
             <Button variant="contained" color="primary" fullWidth>
               Editar Perfil

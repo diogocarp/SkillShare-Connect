@@ -19,15 +19,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const UserLogin = () => {
+const PostCreate = () => {
 
-  const [user, setUser] = useState({})
+    const ls = new SecureLS({ encodingType: 'aes', isCompression: false });
+    const userdata = JSON.parse(ls.get('userData'));
+
+    const [post, setPost] = useState({
+    userEmail: userdata.email,
+    title: '',
+    description: '',
+    image: ''
+  });
   const classes = useStyles();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setUser(prevState => ({
+    setPost(prevState => ({
         ...prevState,
         [name]: value
     }));
@@ -35,27 +43,13 @@ const UserLogin = () => {
 
   const onFinish = async (e) => {
     e.preventDefault(); 
-    const ls = new SecureLS({ encodingType: 'aes', isCompression: false });
-  
     try {
-        const response = await axios.get(`http://localhost:3000/users/${user.email}`);
-        const userData = response.data;
-        const emailResp = userData.email;
-        const passwordResp = userData.password;
-        if(emailResp !== user.email){
-            alert('Email incorreto!')
-            return
-        }
-        if(passwordResp !== user.password){
-            alert('Senha incorreta!')
-            return
-        }
-        alert('Login feito com sucesso!');
-        ls.set('userData', JSON.stringify(userData))
+        await axios.post('http://localhost:3000/posts', post);
+        alert('Post criado com sucesso!');
         navigate('/feed');
     } catch (error) {
         console.log(error);
-        alert('Erro ao fazer login. Verifique suas credenciais e tente novamente.');
+        alert('Erro ao criar post. Tente novamente.');
     }
   };
 
@@ -65,7 +59,7 @@ const UserLogin = () => {
     <Container component="main" maxWidth="xs">
       <div className={classes.root}>
         <Typography component="h1" variant="h5">
-          Login
+          Criar Post
         </Typography>
         <form className={classes.form} onSubmit={onFinish}>
           <TextField
@@ -73,12 +67,10 @@ const UserLogin = () => {
             margin="normal"
             required
             fullWidth
-            id="email"
-            label="Email"
-            name="email"
-            autoComplete="email"
-            autoFocus
-            value={user.email || ''}
+            id="title"
+            label="Título"
+            name="title"
+            value={post.title}
             onChange={handleChange}
           />
           <TextField
@@ -86,12 +78,20 @@ const UserLogin = () => {
             margin="normal"
             required
             fullWidth
-            name="password"
-            label="Senha"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            value={user.password || ''}
+            name="description"
+            label="Descrição"
+            multiline
+            rows={4}
+            value={post.description}
+            onChange={handleChange}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            fullWidth
+            name="image"
+            label="URL das Imagens"
+            value={post.image}
             onChange={handleChange}
           />
           <Button
@@ -101,7 +101,7 @@ const UserLogin = () => {
             color="primary"
             className={classes.submit}
           >
-            Entrar
+            Criar Post
           </Button>
         </form>
       </div>
@@ -110,4 +110,4 @@ const UserLogin = () => {
   );
 };
 
-export default UserLogin;
+export default PostCreate;
