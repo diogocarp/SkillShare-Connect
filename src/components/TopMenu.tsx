@@ -12,7 +12,6 @@ const TopMenu = () => {
           SkillShare
         </Typography>
         <Button component={Link} to="/" color="inherit">Home</Button>
-        <Button component={Link} to="/userlogin" color="inherit">Login</Button>
         <Button component={Link} to="/userregister" color="inherit">Registrar</Button>
         <Button component={Link} to="/userprofile" color="inherit">Perfil</Button>
         <Button component={Link} to="/userlogin" color="inherit" onClick={() => {ls.remove('userdata')}}>Sair</Button>

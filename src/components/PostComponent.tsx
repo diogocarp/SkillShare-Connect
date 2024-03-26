@@ -1,16 +1,24 @@
 import { Card, CardHeader, Avatar, Typography, CardContent } from '@material-ui/core';
+import { format } from 'date-fns';
 
-const PostContainer = ({ posts, users, classes }) => {
+const PostContainer = ({ posts, classes }) => {
+
+    function getFormattedDate(date: Date){
+        const formattedDate: string = format(date, 'dd/MM/yyyy')
+        return formattedDate
+    }
+  
   return (
     <>
       {posts.map(post => (
+        
         <Card key={post._id} className={classes.card}>
           <CardHeader
             avatar={
-              <Avatar alt={users[post.user]?.username} src="/avatar.jpg" />
+              <Avatar alt={post.username} src="/avatar.jpg" />
             }
-            title={users[post.user]?.username}
-            subheader="3 horas atrás"
+            title={post.username}
+            subheader={getFormattedDate(post.date)}
           />
           <Typography variant="h6" color="primary" style={{ marginLeft: '1em' }}>
             {post.title}

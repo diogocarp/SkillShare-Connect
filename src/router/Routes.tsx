@@ -5,6 +5,7 @@ import UserProfile from '../pages/UserProfilePage';
 import UserRegister from '../pages/UserRegister';
 import PostCreate from '../pages/PostCreate';
 
+
 const RootRoute = () => {
   const { pathname } = useLocation(); 
 
@@ -16,16 +17,15 @@ const RootRoute = () => {
 };
 
 const Router = createBrowserRouter(
+  
     createRoutesFromElements(
-      
-     
         <>
         <Route path="/" element={<RootRoute />} />
-        <Route path="/feed" element={<HomePage/>} />
-        <Route path="/userlogin" element={<UserLogin/>} />
-        <Route path="/userregister" element={<UserRegister/>} />
-        <Route path="/userprofile" element={<UserProfile/>} />
-        <Route path="/postcreate" element={<PostCreate/>} />
+        <Route path="/feed" element={<HomePage />} />
+        <Route path="/userlogin" element={<UserLogin />} />
+        <Route path="/userregister" element={<UserRegister />} />
+        <Route path="/userprofile" element={<UserProfile />} />
+        <Route path="/postcreate" element={<PostCreate />} />
       </>
     )
   )

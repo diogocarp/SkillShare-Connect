@@ -3,10 +3,13 @@ import Router from "./router/Routes";
 
 
 
+
 const App = () => {
   return (
     <>
+
       <RouterProvider router={Router}/>
+      
     </>
   );
 };

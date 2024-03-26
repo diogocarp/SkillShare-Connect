@@ -25,7 +25,6 @@ const HomePage = () => {
   const userData = JSON.parse(ls.get('userData'));
 
   const [posts, setPosts] = useState([]);
-  const [users, setUsers] = useState({});
   const classes = useStyles();
 
   useEffect(() => {
@@ -39,22 +38,6 @@ const HomePage = () => {
     };
     fetchPosts();
   }, []);
-
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const usersMap = {};
-        await Promise.all(posts.map(async post => {
-          const response = await Api.get(`http://localhost:3000/users/${post.userEmail}`);
-          usersMap[post.user] = response.data;
-        }));
-        setUsers(usersMap);
-      } catch (error) {
-        alert('Ocorreu um erro ao carregar os usuários! ' + error);
-      }
-    };
-    fetchUsers();
-  }, [posts]);
   
   return (
     <>
@@ -65,7 +48,7 @@ const HomePage = () => {
       <Container>
         <Grid container spacing={2}>
           <Grid item xs={12} md={8}>
-            <PostComponent posts={posts} users={users} classes={classes} /> 
+            <PostComponent posts={posts} classes={classes} /> 
           </Grid>
           <Grid item xs={12} md={4}>
             <Card className={classes.card}>

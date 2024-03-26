@@ -25,7 +25,8 @@ const PostCreate = () => {
     const userdata = JSON.parse(ls.get('userData'));
 
     const [post, setPost] = useState({
-    userEmail: userdata.email,
+    username: userdata.username,
+    date: Date(),
     title: '',
     description: '',
     image: ''
