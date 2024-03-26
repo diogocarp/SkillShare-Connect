@@ -1,11 +1,12 @@
-import { Typography, Container, Grid, Card, CardHeader, CardContent, Avatar, Button } from '@material-ui/core';
+import { useEffect, useState } from 'react';
+import { Container, Grid, Button, Card, CardHeader } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { blue } from '@material-ui/core/colors';
 import TopMenu from '../components/TopMenu';
 import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
 import { Api } from '../api/Api';
 import SecureLS from 'secure-ls';
+import PostComponent from '../components/PostComponent'; 
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -64,40 +65,13 @@ const HomePage = () => {
       <Container>
         <Grid container spacing={2}>
           <Grid item xs={12} md={8}>
-            {posts.map(post => (
-              <Card key={post._id} className={classes.card}>
-                <CardHeader
-                  avatar={
-                    <Avatar alt={users[post.user]?.username} src="/avatar.jpg" />
-                  }
-                  title={users[post.user]?.username}
-                  subheader="3 horas atrás"
-                />
-                <Typography variant="h6" color="primary" style={{ marginLeft: '1em' }}>
-                  {post.title}
-                </Typography>
-                <hr />
-                <CardContent>
-                  <Typography variant="body1" color="textPrimary">
-                    {post.description}
-                  </Typography>
-                  <br/>
-                  <center>
-                  <div style={{maxWidth: '500px', maxHeight:'500px'}}>
-                  <img alt={post.title} src={post.image} style={{ width: '100%', height: '100%', objectFit:'fill' }} />
-                  </div>
-                  </center>
-                </CardContent>
-              </Card>
-            ))}
+            <PostComponent posts={posts} users={users} classes={classes} /> 
           </Grid>
           <Grid item xs={12} md={4}>
             <Card className={classes.card}>
               <CardHeader
                 title="Amigos"
               />
-              <CardContent>
-              </CardContent>
             </Card>
           </Grid>
         </Grid>
