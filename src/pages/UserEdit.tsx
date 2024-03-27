@@ -1,10 +1,18 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Typography, TextField, Button, Container, Chip } from "@material-ui/core";
+import {
+  Typography,
+  TextField,
+  Button,
+  Container,
+  Chip,
+  MenuItem
+} from "@material-ui/core";
 import TopMenu from "../components/TopMenu";
 import { Api } from "../api/Api";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import SecureLS from "secure-ls";
+import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,6 +33,7 @@ const UserEdit = () => {
   const [user, setUser] = useState({ username: "", email: "", password: "", skills: [] });
   const ls = new SecureLS({ encodingType: "aes", isCompression: false });
   const [newSkill, setNewSkill] = useState("");
+  const [languages, setLanguages] = useState([]);
   const userdata = JSON.parse(ls.get("userData"));
 
   useEffect(() => {
@@ -39,6 +48,19 @@ const UserEdit = () => {
 
     fetchUser();
   }, [userdata.email]);
+
+  useEffect(() => {
+    const fetchLanguages = async () => {
+      try {
+        const response = await axios.get('https://api.github.com/languages');
+        setLanguages(response.data);
+      } catch (error) {
+        console.error('Error fetching languages:', error);
+      }
+    };
+
+    fetchLanguages();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -128,6 +150,7 @@ const UserEdit = () => {
               variant="outlined"
               margin="normal"
               fullWidth
+              select
               label="Habilidades"
               value={newSkill}
               onChange={(e) => setNewSkill(e.target.value)}
@@ -138,7 +161,13 @@ const UserEdit = () => {
                   </Button>
                 ),
               }}
-            />
+            >
+              {languages.map((language) => (
+                <MenuItem key={language.name} value={language.name}>
+                  {language.name}
+                </MenuItem>
+              ))}
+            </TextField>
             <div>
               {user.skills.map((skill, index) => (
                 <Chip

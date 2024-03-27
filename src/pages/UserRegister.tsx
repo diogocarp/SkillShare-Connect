@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Typography, TextField, Button, Container, Chip } from "@material-ui/core";
+import { Typography, TextField, Button, Container, Chip, MenuItem } from "@material-ui/core";
 import TopMenu from "../components/TopMenu";
 import { Api } from "../api/Api";
-import { Link, useNavigate } from "react-router-dom";
+import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,7 +26,21 @@ const UserRegister = () => {
   const classes = useStyles();
   const [user, setUser] = useState({ username: "", email: "", password: "", skills: [] });
   const [newSkill, setNewSkill] = useState("");
+  const [languages, setLanguages] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchLanguages = async () => {
+      try {
+        const response = await axios.get('https://api.github.com/languages');
+        setLanguages(response.data);
+      } catch (error) {
+        console.error('Error fetching languages:', error);
+      }
+    };
+
+    fetchLanguages();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -115,6 +130,7 @@ const UserRegister = () => {
               variant="outlined"
               margin="normal"
               fullWidth
+              select
               label="Habilidades"
               value={newSkill}
               onChange={(e) => setNewSkill(e.target.value)}
@@ -125,7 +141,14 @@ const UserRegister = () => {
                   </Button>
                 ),
               }}
-            />
+            >
+              {languages.map((language) => (
+                <MenuItem key={language.name} value={language.name}>
+                {language.name}
+              </MenuItem>              
+              ))}
+            </TextField>
+                
             <div>
               {user.skills.map((skill, index) => (
                 <Chip
