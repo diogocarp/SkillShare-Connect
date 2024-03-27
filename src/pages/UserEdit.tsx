@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography, TextField, Button, Container, Chip } from "@material-ui/core";
 import TopMenu from "../components/TopMenu";
 import { Api } from "../api/Api";
-import { Link, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import SecureLS from "secure-ls";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -16,16 +17,28 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
-  chip: {
-    margin: theme.spacing(0.5),
-  },
 }));
 
-const UserRegister = () => {
+const UserEdit = () => {
   const classes = useStyles();
-  const [user, setUser] = useState({ username: "", email: "", password: "", skills: [] });
-  const [newSkill, setNewSkill] = useState("");
   const navigate = useNavigate();
+  const [user, setUser] = useState({ username: "", email: "", password: "", skills: [] });
+  const ls = new SecureLS({ encodingType: "aes", isCompression: false });
+  const [newSkill, setNewSkill] = useState("");
+  const userdata = JSON.parse(ls.get("userData"));
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await Api.get(`http://localhost:3000/users/${userdata.email}`);
+        setUser(response.data);
+      } catch (error) {
+        console.error("Erro ao buscar usuário:", error);
+      }
+    };
+
+    fetchUser();
+  }, [userdata.email]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -34,7 +47,7 @@ const UserRegister = () => {
       [name]: value,
     }));
   };
-
+  
   const handleAddSkill = () => {
     if (newSkill.trim() !== "") {
       setUser((prevState) => ({
@@ -56,10 +69,10 @@ const UserRegister = () => {
     e.preventDefault();
 
     try {
-      const response = await Api.post("http://localhost:3000/users", user);
+      const response = await Api.put(`http://localhost:3000/users/${userdata._id}`, user);
       console.log(response);
-      alert("Cadastrado com sucesso!");
-      navigate("/userlogin");
+      alert("Atualizado com sucesso!");
+      navigate("/userprofile");
     } catch (error) {
       alert("Erro ao enviar dados:" + error);
     }
@@ -71,7 +84,7 @@ const UserRegister = () => {
       <Container component="main" maxWidth="xs">
         <div className={classes.root}>
           <Typography component="h1" variant="h5">
-            Cadastro
+            Editar Perfil
           </Typography>
           <form className={classes.form} onSubmit={onFinish}>
             <TextField
@@ -96,7 +109,7 @@ const UserRegister = () => {
               name="email"
               autoComplete="email"
               value={user.email}
-              onChange={handleChange}
+              disabled 
             />
             <TextField
               variant="outlined"
@@ -143,7 +156,7 @@ const UserRegister = () => {
               color="primary"
               className={classes.submit}
             >
-              Salvar
+              Atualizar
             </Button>
           </form>
         </div>
@@ -152,4 +165,4 @@ const UserRegister = () => {
   );
 };
 
-export default UserRegister;
+export default UserEdit;

@@ -4,6 +4,7 @@ import UserLogin from '../pages/UserLogin';
 import UserProfile from '../pages/UserProfilePage';
 import UserRegister from '../pages/UserRegister';
 import PostCreate from '../pages/PostCreate';
+import UserEdit from '../pages/UserEdit';
 
 
 const RootRoute = () => {
@@ -26,6 +27,7 @@ const Router = createBrowserRouter(
         <Route path="/userregister" element={<UserRegister />} />
         <Route path="/userprofile" element={<UserProfile />} />
         <Route path="/postcreate" element={<PostCreate />} />
+        <Route path="/useredit" element={<UserEdit />} />
       </>
     )
   )
