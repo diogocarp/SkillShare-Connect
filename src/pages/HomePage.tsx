@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Container, Grid, Button, Card, CardHeader } from "@material-ui/core";
+import React, { useState, useEffect } from "react";
+import { Container, Grid, Button, Card, CardHeader, CardContent } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { blue } from "@material-ui/core/colors";
 import TopMenu from "../components/TopMenu";
@@ -18,6 +18,19 @@ const useStyles = makeStyles((theme) => ({
   card: {
     marginBottom: theme.spacing(2),
   },
+  footerCard: {
+    position: "fixed",
+    bottom: 0,
+    right: 0,
+    zIndex: 1000,
+    width: "100%",
+    maxWidth: "30%",
+  },
+  container: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-start",
+  },
 }));
 
 const HomePage = () => {
@@ -25,6 +38,7 @@ const HomePage = () => {
   const userdata = JSON.parse(ls.get("userData"));
 
   const [posts, setPosts] = useState([]);
+  const [isFooterExpanded, setIsFooterExpanded] = useState(false);
   const classes = useStyles();
 
   useEffect(() => {
@@ -39,6 +53,10 @@ const HomePage = () => {
     fetchPosts();
   }, []);
 
+  const toggleFooter = () => {
+    setIsFooterExpanded(!isFooterExpanded);
+  };
+
   return (
     <>
       <TopMenu />
@@ -47,17 +65,20 @@ const HomePage = () => {
         Criar Post
       </Button>
       <br />
-      <Container>
+      <Container className={classes.container}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={8}>
             <PostComponent posts={posts} classes={classes} />
           </Grid>
-          <Grid item xs={12} md={4}>
-            <Card className={classes.card}>
-              <CardHeader title="Amigos" />
-            </Card>
-          </Grid>
         </Grid>
+        <Card className={classes.footerCard} onClick={toggleFooter}>
+          <CardHeader title="Amigos" />
+          {isFooterExpanded && (
+            <CardContent>
+              <p>Conteúdo do footer aqui...</p>
+            </CardContent>
+          )}
+        </Card>
       </Container>
     </>
   );
