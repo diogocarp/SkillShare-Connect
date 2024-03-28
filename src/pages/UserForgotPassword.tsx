@@ -69,7 +69,7 @@ const UserLogin = () => {
       <Container component="main" maxWidth="xs">
         <div className={classes.root}>
           <Typography component="h1" variant="h5">
-            Login
+            Esqueci minha senha
           </Typography>
           <form className={classes.form} onSubmit={onFinish}>
             <TextField
@@ -85,20 +85,6 @@ const UserLogin = () => {
               value={user.email || ""}
               onChange={handleChange}
             />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Senha"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              value={user.password || ""}
-              onChange={handleChange}
-            />
-            <Link to="/forgotpassword">Esqueci minha senha</Link>
             <Button
               type="submit"
               fullWidth
@@ -106,7 +92,7 @@ const UserLogin = () => {
               color="primary"
               className={classes.submit}
             >
-              Entrar
+              Enviar codigo!
             </Button>
           </form>
         </div>

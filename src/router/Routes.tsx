@@ -1,6 +1,7 @@
 import {  Navigate, Route, createBrowserRouter, createRoutesFromElements, useLocation  } from 'react-router-dom';
 import HomePage from '../pages/HomePage';
 import UserLogin from '../pages/UserLogin';
+import UserForgotPassword from '../pages/UserForgotPassword';
 import UserProfile from '../pages/UserProfilePage';
 import UserRegister from '../pages/UserRegister';
 import PostCreate from '../pages/PostCreate';
@@ -28,6 +29,7 @@ const Router = createBrowserRouter(
         <Route path="/userprofile" element={<UserProfile />} />
         <Route path="/postcreate" element={<PostCreate />} />
         <Route path="/useredit" element={<UserEdit />} />
+        <Route path="/forgotpassword" element={<UserForgotPassword />} />
       </>
     )
   )
